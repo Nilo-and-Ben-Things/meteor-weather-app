@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
@@ -34,9 +35,25 @@ Template.weather.helpers({
 
 Template.weather.events({
   'click button'(event, instance) {
+    let apiKey = Meteor.settings.public.openweathermapapi;
 
-    Meteor.call('weatherSearch');
+    HTTP.call('GET', 'http://api.openweathermap.org/data/2.5/weather', {
+        params: {
+          zip: '3029,au',
+          units: 'metric',
+          appid: apiKey
+        }
+      },
+      (error, result) => {
+        if (error) {
+          console.log(error);
+        }
+        else {
+          let temperature = result.data.main.temp;
+          instance.temperature.set(temperature);
+        }
+      }
+    );
 
-    instance.temperature.set();
   },
 });
