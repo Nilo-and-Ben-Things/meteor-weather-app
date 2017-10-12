@@ -20,3 +20,23 @@ Template.hello.events({
     instance.counter.set(instance.counter.get() + 1);
   },
 });
+
+
+Template.weather.onCreated(function weatherOnCreated() {
+  this.temperature = new ReactiveVar(0);
+});
+
+Template.weather.helpers({
+  temperature() {
+    return Template.instance().temperature.get();
+  },
+});
+
+Template.weather.events({
+  'click button'(event, instance) {
+
+    Meteor.call('weatherSearch');
+
+    instance.temperature.set();
+  },
+});
