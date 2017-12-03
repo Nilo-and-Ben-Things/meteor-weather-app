@@ -17,7 +17,7 @@ Template.weather.onCreated(function weatherOnCreated() {
     lat: this.loc.lat,
     lon: this.loc.lng,
     units: 'metric',
-  })
+  });
 });
 
 Template.weather.helpers({
@@ -70,12 +70,7 @@ Template.weather.events({
 
 let weather = {
   get_data( instance, params ) {
-    let apiKey = Meteor.settings.public.openweathermap;
-    params.appid = apiKey;
-
-    HTTP.call('GET', 'http://api.openweathermap.org/data/2.5/weather', {
-        params: params
-      },
+    Meteor.call('getWeather', params,
       (error, result) => {
         if (error) {
           console.log(error);
